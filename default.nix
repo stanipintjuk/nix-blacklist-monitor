@@ -50,5 +50,5 @@ in
     };
   };
 
-  imports = [./check-dns-bl.nix];
+  imports = [./cron.nix];
 }
