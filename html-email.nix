@@ -1,4 +1,4 @@
-pkgs: 
+{pkgs, title, subject ? title}: 
   let
     row_open = ''<tr style=\"padding: 0px 5px 0px 10px; border-radius: 5px; color: #ffffff; font-family:Courier New, Courier, monospace\"><td></td>'';
     row_close= ''<td></td></tr>'';
@@ -11,10 +11,9 @@ pkgs:
   in
   ''
   #surround all lines with <p>
-  #text=$(echo "$1" | ${pkgs.gnused}/bin/sed "s/\(.*\)/<p style=\"padding: 5px 0px 5px 0px; margin: 0px;\">\1<\/p>/")
   text=$(echo "$1" | ${pkgs.gawk}/bin/awk '{printf "${row_open}${line_open}%d${line_close}${code_open}%s${code_close}${row_close}", NR, $0}')
   cat <<EOT
-  Subject: $2 Is In A Blacklist!
+  Subject: ${subject}
   Content-Type: text/html
   <html>
     <body style="margin: 0px; padding: 0px;" >

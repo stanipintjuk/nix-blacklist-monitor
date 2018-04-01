@@ -2,37 +2,31 @@
 let
   cfg = config.checkDnsBL;
   script = builtins.fetchurl cfg.scriptUrl;
-  checkScript = ''PYTHONPATH="$PYTHONPATH:${pkgs.python35Packages.dns}/lib/python3.5/site-packages" ${pkgs.python35}/bin/python3 ${script}'';
+  executable = ''PYTHONPATH="$PYTHONPATH:${pkgs.python35Packages.dns}/lib/python3.5/site-packages" ${pkgs.python35}/bin/python3 ${script}'';
 
-  mailingList = builtins.foldl' (x: y: "${x} ${y}") "" cfg.mailTo;
+  mailTemplate = pkgs.writeScript "htmlmailgen" (import ./html-email.nix 
+    { 
+      inherit pkgs; 
+      subject = "I found $2 in a blacklisted";
+      title = "$2 is blacklisted";
+    });
+  mailIfFail = import ./mail-if-fail.nix;
 
-  htmlEmail = pkgs.writeScript "htmlmailgen" (import ./html-email.nix pkgs);
-  sendmail = "${pkgs.postfix}/bin/sendmail";
-  sendmailCommand = "${sendmail} -f ${cfg.mailFrom} -t ${mailingList}";
-
-  blackListChecker = import ./check-dns-bl.nix;
+  checkAddress = addr: mailIfFail {
+    inherit pkgs;
+    exec = executable;
+    args = addr;
+    mailTemplate = mailTemplate;
+    mailFrom = cfg.mailFrom;
+    mailTo = cfg.mailTo;
+  };
 in
 {
-  environment = lib.mkIf cfg.enable {
-    systemPackages = with pkgs; [ python35Packages.dns python35 ];
-  };
-
-  
   services = lib.mkIf cfg.enable {
     cron = {
       enable = true;
       systemCronJobs = builtins.map 
-        (addr: 
-          let 
-            checkAddress = blackListChecker { 
-              inherit pkgs htmlEmail sendmailCommand; 
-              #checkScript = "echo 'row1\nrow2\row3'";
-              checkScript = checkScript;
-              address = addr; 
-            };
-          in
-        ''0 6 * * *  root ${checkAddress}''
-        ) 
+        (addr: ''*/1 * * * *  root ${checkAddress addr}'') 
         cfg.addresses;
     };
   };
