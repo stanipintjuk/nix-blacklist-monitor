@@ -1,12 +1,14 @@
-#Nix Blacklist Monitor
+# Nix Blacklist Monitor
 
-This is a simple blacklist monitor for servers running NixOS. It uses Georg Sauthoff's `check-dnbl.py` script [(repo)](https://github.com/gsauthof/utility) to check if one of your domains is in a blacklist, and if it then it will automatically send you a nice looking email telling you about it:
+This is a simple blacklist monitor for servers running NixOS. It uses Georg Sauthoff's `check-dnsbl.py` script [(repo)](https://github.com/gsauthof/utility) to check if one of your domains is in a blacklist, and if it then it will automatically send you a nice looking email telling you about it:
 
 ![Example email](example_mail.jpg)
 
-(that email is just a testing domain I use, I am in no way affiliated with it)
+_(I am in no way affiliated with the domain mentioned in the email, I was just using it for testing)_
 
-#Usage
+
+
+# Usage
 
 * clone the repo
 * add this to your nix configuration:
