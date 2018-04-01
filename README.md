@@ -4,7 +4,9 @@ This is a simple blacklist monitor for servers running NixOS. It uses Georg Saut
 
 ![Example email](example_mail.jpg)
 
-(that email is just a testing domain I use, I am in no way affiliated with it)
+_(I am in no way affiliated with the domain mentioned in the email, I was just using it for testing)_
+
+
 
 # Usage
 
