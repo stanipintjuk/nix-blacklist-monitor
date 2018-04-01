@@ -26,7 +26,7 @@ in
     cron = {
       enable = true;
       systemCronJobs = builtins.map 
-        (addr: ''*/1 * * * *  root ${checkAddress addr}'') 
+        (addr: ''0 5 * * *  root ${checkAddress addr}'') 
         cfg.addresses;
     };
   };
