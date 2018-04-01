@@ -18,7 +18,7 @@ pkgs:
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr style="padding: 0px; margin: 0px;" >
           <td align="center">
-            <h4 style="font-weight: normal; padding: 5px 0px 5px 0px">here are the results from today's blacklist scan</h3>
+            <h4 style="font-weight: normal; padding: 5px 0px 5px 0px">here are the results from today's blacklist check</h3>
           </td>
         </tr>
       </table>
@@ -33,7 +33,7 @@ pkgs:
         </tr>
       </table>
 
-      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <table style="padding-top: 10px;" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td align="center">
             <p style="color: #cccccc">
