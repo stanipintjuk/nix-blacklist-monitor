@@ -38,7 +38,7 @@ pkgs:
             $text
       </table>
 
-      <table style="padding: 30px 0px 0px 30px;" width="100%" border="0" cellspacing="0" cellpadding="0">
+      <table style="padding: 30px 0px 30px 3px;" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
           <td align="center">
             <p style="color: #cccccc">
