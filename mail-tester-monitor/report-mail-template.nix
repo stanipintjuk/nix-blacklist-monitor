@@ -7,8 +7,6 @@ pkgs:
   ''
   #surround all lines with <p>
   cat <<EOT
-  Subject: ${subject}
-  Content-Type: text/html
   <html>
     <body style="margin: 0px; padding: 0px;" >
       <table width="100%"  style="background-color: #8dc8d6; color: #ffffff" border="0" cellspacing="0" cellpadding="0">

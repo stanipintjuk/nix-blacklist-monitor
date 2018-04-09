@@ -16,14 +16,15 @@ in
         '';
     };
 
-    mailTesterFromEmail = mkOption {
+    emailUser = mkOption {
       type = types.str;
       description = ''The email address that will send the test emails to mail-tester.com'';
     };
-    mailTesterUsername = mkOption {
+
+    emailPassword = mkOption {
       type = types.str;
-      description = ''Your API username on mail-tester.com'';
-    };
+      description = ''The password to the email that will send the test email to mail-tester.com'';
+    }; 
 
     minMark = mkOption {
       type = types.str;
@@ -50,8 +51,8 @@ in
         cfg = config.mailTester;
       exec = mail-tester {
         inherit pkgs;
-        fromEmail = cfg.mailTesterFromEmail;
-        mailTesterUsername = cfg.mailTesterUsername;
+        fromEmail = cfg.emailUser;
+        password = cfg.emailPassword;
         minMark = cfg.minMark;
         sendReportsTo = cfg.sendReportsTo;
         reporterEmail = cfg.reporterEmail;
