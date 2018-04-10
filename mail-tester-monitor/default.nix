@@ -1,7 +1,7 @@
 { pkgs, config, lib, ...}:
 with lib;
 let
-  mail-tester = import ./mail-tester.nix;
+  mailTester = import ./mail-tester.nix;
 in
 {
   options.mailTester = {
@@ -48,17 +48,18 @@ in
       enable = true;
       systemCronJobs = 
         let
-        cfg = config.mailTester;
-      exec = mail-tester {
-        inherit pkgs;
-        fromEmail = cfg.emailUser;
-        password = cfg.emailPassword;
-        minMark = cfg.minMark;
-        sendReportsTo = cfg.sendReportsTo;
-        reporterEmail = cfg.reporterEmail;
-      };
+          cfg = config.mailTester;
+          cronMonitor = import ../cron-monitor/cron-monitor.nix { inherit pkgs; sendReportsTo = cfg.sendReportsTo; };
+          exec = mailTester {
+            inherit pkgs;
+            fromEmail = cfg.emailUser;
+            password = cfg.emailPassword;
+            minMark = cfg.minMark;
+            sendReportsTo = cfg.sendReportsTo;
+            reporterEmail = cfg.reporterEmail;
+          };
       in
-        [''0 5 * * *  root ${exec}'' ];
+        [''0 5 * * *  root ${cronMonitor exec}'' ];
     };
   };
 }

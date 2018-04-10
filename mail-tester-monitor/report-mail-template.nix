@@ -12,7 +12,9 @@ pkgs:
       <table width="100%"  style="background-color: #8dc8d6; color: #ffffff" border="0" cellspacing="0" cellpadding="0">
         <tr style="padding: 0px; margin: 0px;" >
           <td align="center">
-            <h4 style="font-weight: normal; padding: 15px 0px 5px 0px">Latest mail tests resulted in a mark of $3</h3>
+            <h1 style="font-weight: normal; padding: 10px 0px 10px 0px; margin: 0px">
+              Latest mail tests resulted in a mark of $3
+            </h1>
           </td>
         </tr>
       </table>

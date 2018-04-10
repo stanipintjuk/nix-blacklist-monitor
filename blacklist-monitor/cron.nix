@@ -12,14 +12,15 @@ let
     });
   mailIfFail = import ./mail-if-fail.nix;
 
-  checkAddress = addr: mailIfFail {
+  cronMonitor = import ../cron-monitor/cron-monitor.nix { inherit pkgs; sendReportsTo = cfg.mailTo; };
+  checkAddress = addr: cronMonitor (mailIfFail {
     inherit pkgs;
     exec = executable;
     args = addr;
     mailTemplate = mailTemplate;
     mailFrom = cfg.mailFrom;
     mailTo = cfg.mailTo;
-  };
+  });
 in
 {
   services = lib.mkIf cfg.enable {
