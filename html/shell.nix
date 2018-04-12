@@ -14,11 +14,16 @@ rec {
 
   fromHeader = text: addHeader "From" text;
   
-  htmlWrapper = text: ''
+  htmlWrapper = text: 
+    print
+    ''
     Content-Type: text/html
     <html>
-      <body>
-        ${text}
+      <body style="margin: 0px; padding: 0px;">
+    '' +
+      text +
+      print
+    ''
       </body>
     </html>
     '';
