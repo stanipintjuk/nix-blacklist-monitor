@@ -50,5 +50,5 @@ in
     };
   };
 
-  imports = [./cron.nix];
+  imports = [./service.nix];
 }

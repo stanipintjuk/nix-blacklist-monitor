@@ -14,7 +14,6 @@ let
     (
       builtins.foldl' (head: tail: "${head}:${tail}") ''PYTHONPATH=$PYTHONPATH'' (map importPythonPackage pythonDependencies) 
     );
-  #executable = ''PYTHONPATH="$PYTHONPATH:${pkgs.python35Packages.dns}/lib/python3.5/site-packages:${pkgs.python35Packages.gevent}/lib/python3.5/site-packages" ${pkgs.python35}/bin/python3 ${script}'';
   executable = ''${pythonPath} ${pkgs.python35}/bin/python3 ${script}'';
 
   mailTemplate = pkgs.writeScript "htmlmailgen" (import ./html-email.nix 
