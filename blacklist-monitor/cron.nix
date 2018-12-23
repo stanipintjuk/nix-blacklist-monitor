@@ -2,7 +2,20 @@
 let
   cfg = config.checkDnsBL;
   script = builtins.fetchurl cfg.scriptUrl;
-  executable = ''PYTHONPATH="$PYTHONPATH:${pkgs.python35Packages.dns}/lib/python3.5/site-packages" ${pkgs.python35}/bin/python3 ${script}'';
+  pythonDependencies = [
+    pkgs.python35Packages.dns 
+    pkgs.python35Packages.gevent
+    pkgs.python35Packages.greenlet
+   ];
+  # helper functions for python imports
+  importPythonPackage = package: "${package}/lib/python3.5/site-packages";
+  
+  pythonPath =
+    (
+      builtins.foldl' (head: tail: "${head}:${tail}") ''PYTHONPATH=$PYTHONPATH'' (map importPythonPackage pythonDependencies) 
+    );
+  #executable = ''PYTHONPATH="$PYTHONPATH:${pkgs.python35Packages.dns}/lib/python3.5/site-packages:${pkgs.python35Packages.gevent}/lib/python3.5/site-packages" ${pkgs.python35}/bin/python3 ${script}'';
+  executable = ''${pythonPath} ${pkgs.python35}/bin/python3 ${script}'';
 
   mailTemplate = pkgs.writeScript "htmlmailgen" (import ./html-email.nix 
     { 
@@ -10,25 +23,27 @@ let
       subject = "I found $2 in a blacklisted";
       title = "$2 is blacklisted";
     });
-  mailIfFail = import ./mail-if-fail.nix;
 
-  cronMonitor = import ../cron-monitor/cron-monitor.nix { inherit pkgs; sendReportsTo = cfg.mailTo; };
-  checkAddress = addr: cronMonitor (mailIfFail {
+  mailIfFail = import ./mail-if-fail.nix;
+  monitor = addr: mailIfFail {
     inherit pkgs;
     exec = executable;
     args = addr;
     mailTemplate = mailTemplate;
-    mailFrom = cfg.mailFrom;
+    mailFrom = "monitor@stani.se";
     mailTo = cfg.mailTo;
-  });
+  };
+
 in
 {
-  services = lib.mkIf cfg.enable {
-    cron = {
-      enable = true;
-      systemCronJobs = builtins.map 
-        (addr: ''0 5 * * *  root ${checkAddress addr}'') 
-        cfg.addresses;
-    };
+  systemd = lib.mkIf cfg.enable {
+    services = lib.mkMerge (builtins.map
+      (addr: {
+        "blacklist-monitor-${addr}" = {
+          enable = true;
+          script = "${monitor addr}";
+        };
+      })
+      cfg.addresses);
   };
 }

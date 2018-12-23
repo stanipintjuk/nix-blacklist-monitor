@@ -4,17 +4,26 @@ let
 in
 pkgs.writeScript "login-notify.sh"
 ''
+#!${pkgs.bash}/bin/bash
+
 isWhiteListed() {
     [[ "${toString whiteList}"  =~ (^| )$1($| ) ]] && return 0 || return 1
 }
 
-#!${pkgs.bash}/bin/bash
+if [[ -z "$SSH_ORIGINAL_COMMAND" ]] ; then
+  cmd="${pkgs.zsh}/bin/zsh"
+else
+  cmd=${"\${SSH_ORIGINAL_COMMAND}"} 
+fi
+
+echo "dis command: $cmd, params: '$@', pwd: `pwd`"
+
 ip=`echo $SSH_CONNECTION | cut -d " " -f 1`
 if isWhiteListed $ip ; then
-  exec ${pkgs.zsh}/bin/zsh
+  exec ${"\${cmd}"}
 else
   host=$( ${pkgs.host}/bin/host "$ip" )
   ${mailTemplate} "$ip" "$host" | ${pkgs.postfix}/bin/sendmail -t ${toString sendReportsTo} &
-  exec ${pkgs.zsh}/bin/zsh
+  exec ${"\${cmd}"}
 fi
 ''
