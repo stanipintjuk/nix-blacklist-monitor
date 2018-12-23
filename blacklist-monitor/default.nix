@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.checkDnsBL;
-  check-dns-bl-script = "https://raw.githubusercontent.com/andreasf/check-dnsbl/24ebd2b611538b63f4a63519066565c559cdfc70/check-dnsbl.py";
+  #check-dns-bl-script = "https://raw.githubusercontent.com/andreasf/check-dnsbl/24ebd2b611538b63f4a63519066565c559cdfc70/check-dnsbl.py";
+  check-dns-bl-script = "https://raw.githubusercontent.com/gsauthof/utility/master/check-dnsbl.py";
 in
 {
   options.checkDnsBL = {

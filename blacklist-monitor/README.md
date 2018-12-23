@@ -1,3 +1,6 @@
+# Note: Abandoned
+Since the check-dnsbl.py script doesn't work for me anymore I have abandoned this project and will be using mxtoolbox until I feel like I have time for this again.
+
 # Nix Blacklist Monitor
 
 This is a simple blacklist monitor for servers running NixOS. It uses Georg Sauthoff's `check-dnsbl.py` script [(repo)](https://github.com/gsauthof/utility) to check if one of your domains is in a blacklist, and if it then it will automatically send you a nice looking email telling you about it:
